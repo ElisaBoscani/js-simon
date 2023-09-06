@@ -8,32 +8,24 @@ const hoursEl = document.getElementById("hours");
 const minutesEl = document.getElementById("minutes");
 const secondsEl = document.getElementById("seconds");
 
-function calculateDate() {
+let countdown = setInterval(function () {
   const data = new Date();
-  const tomorrowDate = new Date();
-  //creo la data di domani
-  tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-  tomorrowDate.setHours(9);
-  tomorrowDate.setMinutes(30);
-  tomorrowDate.setSeconds(0);
-  tomorrowDate.setMilliseconds(0);
+  const tomorrowDate = new Date(2023, 8, 6, 23, 38);
   console.log(tomorrowDate);
   //trovo i millisecondi
-  let difference = data - tomorrowDate;
+  let difference = tomorrowDate - data;
   console.log(difference);
   //calcolo i vari elementi
-  let seconds = Math.floor(difference / 1000);
-  console.log(seconds);
-  let minutes = Math.floor(seconds / 60);
-  console.log(minutes);
-  let hours = Math.floor(minutes / 60);
-  console.log(hours);
-  let day = Math.floor(hours / 24);
-  console.log(day);
+
+  const day = Math.floor(difference / (1000 * 60 * 60 * 24));
+  const hours = Math.floor(
+    (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
+  const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
   //li trasformo
-  seconds %= 60;
-  minutes %= 60;
-  hours %= 24;
+
   //stampo in pagina
   console.log(seconds, minutes, hours);
 
@@ -41,7 +33,7 @@ function calculateDate() {
   hoursEl.innerHTML = hours;
   minutesEl.innerHTML = minutes;
   secondsEl.innerHTML = seconds;
-}
-
-calculateDate();
-setInterval(calculateDate, 1000);
+  if (difference < 0) {
+    clearInterval(countdown);
+  }
+}, 1000);
